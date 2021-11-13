@@ -52,10 +52,11 @@ def get_languages():
 @app.route("/get_words")
 def get_similar_words():
     word_clicked = request.values['word_clicked']
-
-    # data = request.get_json()
-    # source_language = data["from_language"]
-    # target_language = data['to_language']
+    print(word_clicked)
+    #data = request.get_json()
+    #print(data)
+    #source_language = data["from_language"]
+    #target_language = data['to_language']
 
     top10_words = tranlate_top_n(word_clicked.lower(), language2model, source_language="German",
                                  target_language="English")

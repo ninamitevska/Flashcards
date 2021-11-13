@@ -1,12 +1,12 @@
 import axios from "axios";
 
-export function get_words(question/*, correctWord*/) {
-    axios.get(`http://localhost:5000/get_words`, {
+export async function get_words(question) {
+    const resp = await axios.get(`http://localhost:5000/get_words`, {
         params: {
             word_clicked: question,
             /*correct_word: correctWord*/
-        }
-    }).then(res => (res.data))
+        }});
+    return resp.data;
 }
 
 export function get_flashcards(fromLanguage, toLanguage) {

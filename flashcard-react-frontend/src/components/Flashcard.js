@@ -1,16 +1,18 @@
-import React, {useState} from "react";
+import React, {useState, useEffect } from "react";
 import '../app.css'
 import {get_words} from "../service/flashcardsService";
+import axios from "axios";
 
 
 const Flashcard = (props) => {
 
     const [flip, setFlip] = useState(false)
     let flipClass = `card ${flip ? 'flip' : ''}`
-    const [wordClick, setWordClicked] = useState()
+    const [wordClick, setWordClicked] = useState();
 
     const doSelect = (word) => {
-        console.log(word)
+        console.log(word);
+
     }
     const options = wordClick?.map(it =>
         (<div key={it[0]}>
@@ -19,12 +21,17 @@ const Flashcard = (props) => {
         </div>)
     )
 
+    const onWordClick = async () => {
+        const data = await get_words(props.flashcard.question);
+        setWordClicked(data);
+    };
+
     return (
         <>
             <div className={flipClass}
                  onClick={() => {
                      setFlip(!flip);
-                     get_words(props.flashcard.question)
+                     onWordClick();
                  }}>
                 <div className="front">
                     {props.flashcard.question}
