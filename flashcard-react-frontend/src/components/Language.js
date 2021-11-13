@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import get_flashcards from "./Flashcard";
+import {get_flashcards} from "../service/flashcardsService";
+import FlashcardList from "./FlashcardList";
+
 
 const Languages = (props) => {
 
@@ -28,14 +30,14 @@ const Languages = (props) => {
     function get_from_languages(fromLanguage) {
         axios.get(`http://localhost:5000/flashcards`, {
             params: {
-                language_selected: fromLanguage
+                from_language: fromLanguage
             }
         }).then(res => setFromLanguage(res.data))
     }
 
     useEffect(() => {
         if (!fromLanguage) {
-            //get_from_languages(props.language_selected)
+            get_from_languages(props.from_language)
             console.log(fromLanguage)
         }
     })
@@ -43,14 +45,14 @@ const Languages = (props) => {
     function get_to_languages(toLanguage) {
         axios.get(`http://localhost:5000/languages`, {
             params: {
-                to_language_data: toLanguage
+                to_language: toLanguage
             }
         }).then(res => setToLanguage(res.data))
     }
 
     useEffect(() => {
         if (!toLanguage) {
-            //get_to_languages(props.to_language_data)
+            get_to_languages(props.to_language)
             //console.log(toLanguage)
         }
     })
@@ -66,12 +68,12 @@ const Languages = (props) => {
 
 
     const onFromLanguageChange = (e) => {
-        setFromLanguage(e.target.language_selected)
+        setFromLanguage(languages[e.target.value - 1].name)
         console.log('from', languages[e.target.value - 1].name)
         //get_from_languages(languages[e.target.value - 1].name)
     }
     const onToLanguageChange = (e) => {
-        setToLanguage(e.target.to_language_data)
+        setToLanguage(languages[e.target.value - 1].name)
         console.log('to', languages[e.target.value - 1].name)
         //get_to_languages(languages[e.target.value - 1].name)
 
@@ -82,13 +84,13 @@ const Languages = (props) => {
             <form className="header">
                 <div className="form-group">
                     <label htmlFor="language">Language that you know</label>
-                    <select defaultChecked="German" onChange={onFromLanguageChange}>
+                    <select onChange={onFromLanguageChange}>
                         {fromLanguageOptions}
                     </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="language">Language that you want to learn</label>
-                    <select defaultChecked="English" onChange={onToLanguageChange}>
+                    <select onChange={onToLanguageChange}>
                         {toLanguageOptions}
                     </select>
                 </div>
@@ -97,7 +99,9 @@ const Languages = (props) => {
                         <input type="number" id="amount" min="1" step="1" defaultValue={10}/>
                     </div>*/}
                 <div className="form-group">
-                    <button className="btn" onChange={() => get_flashcards(props.language_selected)}>Generate</button>
+                    <button className="btn" onClick={() => <FlashcardList
+                        flash_cards={get_flashcards(fromLanguage, toLanguage)}/>}>Generate
+                    </button>
                 </div>
                 <div className="form-group">
                     {/*<button className="btn" onClick={cardShuffler(flashcards)} id="shuffle">Shuffle</button>*/}

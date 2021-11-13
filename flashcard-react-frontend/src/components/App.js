@@ -8,7 +8,7 @@ function App() {
         <div className="App">
             <Languages/>
             <div className="container">
-                <FlashcardList/>
+                {/*<FlashcardList flash_cards={"1"}/>*/}
             </div>
         </div>
     );

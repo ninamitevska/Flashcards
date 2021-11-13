@@ -26,15 +26,20 @@ def on_website_load():  # put application's code here
 #     flashcards_data = jsonify(flashcards_data)
 #     return flashcards_data
 
-@app.route("/flashcards")
+
+@app.route("/flashcards", methods=['POST'])
 def get_flashcards():
-    source_language = "German" #request.values['language_selected']
-    print(source_language)
-    random_ids = random.sample(range(0, 2000), 24)
-    random_words = [language2model[source_language].index_to_key[idx] for idx in random_ids]
-    flashcards_data = {'flash_cards': [{'id': idx, 'question': word} for idx, word in enumerate(random_words)]}
-    flashcards_data = jsonify(flashcards_data)
-    return flashcards_data
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        source_language = data["from_language"]
+        #to_language = request.values['to_language']
+        #print(from_language)
+        random_ids = random.sample(range(0, 2000), 24)
+        random_words = [language2model[source_language].index_to_key[idx] for idx in random_ids]
+        flashcards_data = {'flash_cards': [{'id': idx, 'question': word} for idx, word in enumerate(random_words)]}
+        flashcards_data = jsonify(flashcards_data)
+        return flashcards_data
 
 
 @app.route("/languages")
@@ -47,6 +52,11 @@ def get_languages():
 @app.route("/get_words")
 def get_similar_words():
     word_clicked = request.values['word_clicked']
+
+    # data = request.get_json()
+    # source_language = data["from_language"]
+    # target_language = data['to_language']
+
     top10_words = tranlate_top_n(word_clicked.lower(), language2model, source_language="German",
                                  target_language="English")
     top10_words = top10_words[0:4]

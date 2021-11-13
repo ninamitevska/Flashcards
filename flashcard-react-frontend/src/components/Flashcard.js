@@ -1,21 +1,13 @@
 import React, {useState} from "react";
 import '../app.css'
-import axios from 'axios';
+import {get_words} from "../service/flashcardsService";
+
 
 const Flashcard = (props) => {
 
     const [flip, setFlip] = useState(false)
     let flipClass = `card ${flip ? 'flip' : ''}`
     const [wordClick, setWordClicked] = useState()
-
-    function get_words(question/*, correctWord*/) {
-        axios.get(`http://localhost:5000/get_words`, {
-            params: {
-                word_clicked: question,
-                /*correct_word: correctWord*/
-            }
-        }).then(res => setWordClicked(res.data))
-    }
 
     const doSelect = (word) => {
         console.log(word)
