@@ -5,8 +5,6 @@ import get_flashcards from "./Flashcard";
 const Languages = (props) => {
 
     const [languages, setLanguages] = useState()
-    const [fromLanguage, setFromLanguage] = useState()
-    const [toLanguage, setToLanguage] = useState()
 
     //const [fcData, setFlashcards] = useState([{}])
 
@@ -24,14 +22,6 @@ const Languages = (props) => {
             console.log(languages)
         }
     })
-
-    function get_from_languages(fromLanguage) {
-        axios.get(`http://localhost:5000/flashcards`, {
-            params: {
-                language_selected: fromLanguage
-            }
-        }).then(res => setFromLanguage(res.data))
-    }
 
     useEffect(() => {
         if (!fromLanguage) {
