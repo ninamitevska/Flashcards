@@ -16,13 +16,13 @@ const Flashcard = (props) => {
     }
     const options = wordClick?.map(it =>
         (<div key={it[0]}>
-            <input type="radio" onClick={() => doSelect(it[0])}/> {it[0]}
+            <input className="radio" type="radio" onClick={() => doSelect(it[0])}/> {it[0]}
 
         </div>)
     )
 
     const onWordClick = async () => {
-        const data = await get_words(props.flashcard.question);
+        const data = await get_words(props.flashcard.question, props.language);
         setWordClicked(data);
     };
 

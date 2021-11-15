@@ -2,11 +2,11 @@ import React, {useEffect, useState} from "react";
 import Flashcard from "./Flashcard";
 import axios from "axios";
 
-const FlashcardList = () => {
+const FlashcardList = (props) => {
     const [flashCards, setFlashcards] = useState([]);
     const [languages, setLanguages] = useState();
     const [fromLanguage, setFromLanguage] = useState("English");
-    const [toLanguage, setToLanguage] = useState("English");
+    const [toLanguage, setToLanguage] = useState("German");
 
     useEffect(() => {
         if (!languages) {
@@ -55,30 +55,33 @@ const FlashcardList = () => {
 
     return (
         <div>
-            <div className="form-group">
-                <label htmlFor="language">Language that you know</label>
-                <select defaultChecked="English" onChange={onFromLanguageChange}>
-                    {fromLanguageOptions}
-                </select>
+            <div className="header">
+                <div className="form-group">
+                    <label htmlFor="language">Language that you know</label>
+                    <select defaultChecked="English" onChange={onFromLanguageChange}>
+                        {fromLanguageOptions}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="language">Language that you want to learn</label>
+                    <select defaultChecked="English" onChange={onToLanguageChange}>
+                        {toLanguageOptions}
+                    </select>
+                </div>
+                <div className="form-group">
+                    <button className="btn" onClick={() => onGenerateClick()}>
+                        Generate
+                    </button>
+                </div>
+                <div className="form-group">
+                    {/*<button className="btn" onClick={cardShuffler(flashcards)} id="shuffle">Shuffle</button>*/}
+                </div>
             </div>
-            <div className="form-group">
-                <label htmlFor="language">Language that you want to learn</label>
-                <select defaultChecked="English" onChange={onToLanguageChange}>
-                    {toLanguageOptions}
-                </select>
-            </div>
-            <div className="form-group">
-                <button className="btn" onClick={() => onGenerateClick()}>
-                    Generate
-                </button>
-            </div>
-            <div className="form-group">
-                {/*<button className="btn" onClick={cardShuffler(flashcards)} id="shuffle">Shuffle</button>*/}
-            </div>
+            <br/>
             <div className="card-grid">
                 {flashCards &&
                 flashCards.map((card) => {
-                    return <Flashcard flashcard={card} key={card.id}/>;
+                    return <Flashcard flashcard={card} tolanguage={props.to_language} key={card.id}/>;
                 })}
             </div>
         </div>
