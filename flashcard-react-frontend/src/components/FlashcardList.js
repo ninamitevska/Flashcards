@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Flashcard from "./Flashcard";
 import axios from "axios";
 
@@ -13,7 +13,6 @@ const FlashcardList = (props) => {
             get_languages();
         }
     });
-
     const onFromLanguageChange = (e) => {
         setFromLanguage(languages[e.target.value - 1].name);
     };
@@ -42,15 +41,16 @@ const FlashcardList = (props) => {
             .then((res) => setLanguages(res.data));
     }
 
-    const get_flashcards = async (language) => {
+    const get_flashcards = async (fromLanguage,toLanguage) => {
         const resp = await axios.post("http://localhost:5000/flashcards", {
-            from_language: language,
+            from_language: fromLanguage,
+            to_language: toLanguage
         });
         return resp.data["flash_cards"];
     };
 
     const onGenerateClick = async () => {
-        setFlashcards(await get_flashcards(fromLanguage));
+        setFlashcards(await get_flashcards(fromLanguage, toLanguage));
     };
 
     return (
@@ -64,7 +64,7 @@ const FlashcardList = (props) => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="language">Language that you want to learn</label>
-                    <select defaultChecked="English" onChange={onToLanguageChange}>
+                    <select defaultChecked="German" onChange={onToLanguageChange}>
                         {toLanguageOptions}
                     </select>
                 </div>
@@ -73,15 +73,15 @@ const FlashcardList = (props) => {
                         Generate
                     </button>
                 </div>
-                <div className="form-group">
-                    {/*<button className="btn" onClick={cardShuffler(flashcards)} id="shuffle">Shuffle</button>*/}
-                </div>
+             {/*   <div className="form-group">
+                    <button className="btn" onClick={cardShuffler(flashcards)} id="shuffle">Shuffle</button>
+                </div>*/}
             </div>
             <br/>
             <div className="card-grid">
                 {flashCards &&
                 flashCards.map((card) => {
-                    return <Flashcard flashcard={card} tolanguage={props.to_language} key={card.id}/>;
+                    return <Flashcard flashcard={card} key={card.id} fromLanguage={props.fromLanguage} toLanguage={props.toLanguage} />;
                 })}
             </div>
         </div>
