@@ -38,13 +38,11 @@ def get_flashcards():
         print(data)
         source_language = data["from_language"]
         target_language = data["to_language"]
-        #to_language = request.values['to_language']
-        #print(from_language)
         random_ids = random.sample(range(0, 2000), 24)
         random_words = [language2model[source_language].index_to_key[idx] for idx in random_ids]
         flashcards_data = {'flash_cards': [{'id': idx, 'question': word} for idx, word in enumerate(random_words)]}
         flashcards_data = jsonify(flashcards_data)
-        return flashcards_data #, source_language
+        return flashcards_data
 
 
 @app.route("/languages")
@@ -60,12 +58,9 @@ def get_similar_words():
     global target_language
     if request.method == 'POST':
         data = request.get_json()
-        # data = request.values
         print("backend", data)
-        word_clicked = data['word_clicked']# request.values['word_clicked']
+        word_clicked = data['word_clicked']
         print(word_clicked)
-        # source_language = data["from_language"]
-        # target_language = data['to_language']
         print(source_language, target_language)
 
         top10_words = tranlate_top_n(word_clicked.lower(), language2model, source_language=source_language,
@@ -75,9 +70,6 @@ def get_similar_words():
         random.shuffle(top10_words)
         return jsonify(top10_words)
 
-# @app.route("/check_translation")
-# def translate():
-#     return ;
 
 if __name__ == '__main__':
     app.run(debug=True)

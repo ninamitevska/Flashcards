@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Flashcard from "./Flashcard";
 import axios from "axios";
 
+
 const FlashcardList = (props) => {
     const [flashCards, setFlashcards] = useState([]);
     const [languages, setLanguages] = useState();
@@ -50,6 +51,8 @@ const FlashcardList = (props) => {
     };
 
     const onGenerateClick = async () => {
+        // setFromLanguage(fromLanguage)
+        // setToLanguage(toLanguage)
         setFlashcards(await get_flashcards(fromLanguage, toLanguage));
     };
 
@@ -64,7 +67,7 @@ const FlashcardList = (props) => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="language">Language that you want to learn</label>
-                    <select defaultChecked="German" onChange={onToLanguageChange}>
+                    <select defaultChecked="English" onChange={onToLanguageChange}>
                         {toLanguageOptions}
                     </select>
                 </div>

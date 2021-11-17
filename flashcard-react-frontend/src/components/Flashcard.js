@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import '../app.css'
 import {get_words} from "../service/flashcardsService";
 
@@ -18,8 +18,16 @@ const Flashcard = (props) => {
     const [wordClick, setWordClicked] = useState();
 
     const doSelect = (word) => {
-        console.log(word);
-    // implement od Riste
+        // console.log(word);
+        const max = wordClick?.reduce(function (prev, current) {
+            return (prev[1] > current[1]) ? prev : current
+        })[0]
+
+        if (max == word) {
+            setCorrectAnswer(true);
+        } else {
+            setCorrectAnswer(false);
+        }
     }
 
     const options = wordClick?.map(it =>
@@ -32,6 +40,7 @@ const Flashcard = (props) => {
         const data = await get_words(props.flashcard.question, props.fromLanguage, props.toLanguage);
         console.log(props.flashcard.question)
         setWordClicked(data);
+        // setFromLanguage(data);
     };
 
     return (
@@ -41,11 +50,11 @@ const Flashcard = (props) => {
                      setFlip(!flip);
                      onWordClick(props.flashcard.question);
                  }}>
-                <div className="front">
+                <div className="front" >
                     {props.flashcard.question}
                 </div>
 
-                <div className="back">
+                <div className="back" >
                     {options}
                 </div>
             </div>
