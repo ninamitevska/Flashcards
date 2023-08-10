@@ -1,6 +1,5 @@
 import React from "react";
 import FlashcardList from "./FlashcardList";
-import Languages from "./Language";
 
 function App() {
   const [fromLanguage, setFromLanguage] = useState();
@@ -8,7 +7,7 @@ function App() {
 
   return (
     <div className="App">
-      <Languages
+      <Language
         setFromLanguage={setFromLanguage}
         setToLanguage={setToLanguage}
       />

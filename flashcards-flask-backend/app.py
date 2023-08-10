@@ -9,6 +9,8 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 language2model = load_models()
+# global source_language
+# global target_language
 # with open("./flashcard-react-frontend/src/data/languages.json") as json_data:
 #     language_data = json.load(json_data)
 
@@ -26,15 +28,21 @@ def on_website_load():  # put application's code here
 #     flashcards_data = jsonify(flashcards_data)
 #     return flashcards_data
 
-@app.route("/flashcards")
+
+@app.route("/flashcards", methods=['POST'])
 def get_flashcards():
-    source_language = "German" #request.values['language_selected']
-    print(source_language)
-    random_ids = random.sample(range(0, 2000), 24)
-    random_words = [language2model[source_language].index_to_key[idx] for idx in random_ids]
-    flashcards_data = {'flash_cards': [{'id': idx, 'question': word} for idx, word in enumerate(random_words)]}
-    flashcards_data = jsonify(flashcards_data)
-    return flashcards_data
+    global source_language
+    global target_language
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+        source_language = data["from_language"]
+        target_language = data["to_language"]
+        random_ids = random.sample(range(0, 2000), 24)
+        random_words = [language2model[source_language].index_to_key[idx] for idx in random_ids]
+        flashcards_data = {'flash_cards': [{'id': idx, 'question': word} for idx, word in enumerate(random_words)]}
+        flashcards_data = jsonify(flashcards_data)
+        return flashcards_data
 
 
 @app.route("/languages")
@@ -44,15 +52,23 @@ def get_languages():
     return jsonify(language_data)
 
 
-@app.route("/get_words")
+@app.route("/get_words", methods=['POST'])
 def get_similar_words():
-    word_clicked = request.values['word_clicked']
-    top10_words = tranlate_top_n(word_clicked.lower(), language2model, source_language="German",
-                                 target_language="English")
-    top10_words = top10_words[0:4]
-    correct_answer = top10_words[0]
-    random.shuffle(top10_words)
-    return jsonify(top10_words)
+    global source_language
+    global target_language
+    if request.method == 'POST':
+        data = request.get_json()
+        print("backend", data)
+        word_clicked = data['word_clicked']
+        print(word_clicked)
+        print(source_language, target_language)
+
+        top10_words = tranlate_top_n(word_clicked.lower(), language2model, source_language=source_language,
+                                     target_language=target_language)
+        top10_words = top10_words[0:4]
+        correct_answer = top10_words[0]
+        random.shuffle(top10_words)
+        return jsonify(top10_words)
 
 
 if __name__ == '__main__':
